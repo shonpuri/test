@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lens_sph_value,lens.sph.value,model_lens_sph_value,,1,1,1,1
+access_lens_cyl_value,lens.cyl.value,model_lens_cyl_value,,1,1,1,1
+access_sale_order_lens_line,sale.order.lens.line,model_sale_order_lens_line,,1,1,1,1

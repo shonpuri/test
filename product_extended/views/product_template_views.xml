@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Products Template Form View-->
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add the field after cost -->
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="cylindrical_value"/>
+                <field name="spherical_value"/>
+            </xpath>
+            <!-- Add the field after purchase ok -->
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-flex" invisible="type == 'combo'">
+                    <field name="manufacturing_ok"/>
+                    <label for="manufacturing_ok"/>
+                </span>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--Products Template tree View-->
+    <record id="view_product_template_list_inherit" model="ir.ui.view">
+        <field name="name">product.template.list.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Add the field after sale price -->
+            <xpath expr="//field[@name='list_price']" position="before">
+                <field name="cylindrical_value" optional="show"/>
+                <field name="spherical_value" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Products Template search View-->
+    <record id="product_template_search_view_inherit_extra_fields" model="ir.ui.view">
+        <field name="name">product.template.search.inherit.extra.fields</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" string="Product"
+                   filter_domain="['|', '|', '|', '|', '|', ('default_code', 'ilike', self), ('product_variant_ids.default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self), ('spherical_value', 'ilike', self), ('cylindrical_value', 'ilike', self)]"/>
+
+            <filter name="filter_to_purchase" position="after">
+                <filter string="Manufacturing" name="filter_to_purchase" domain="[('manufacturing_ok', '=', True)]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!--Product.Product Form View-->
+    <record id="view_product_product_form_inherit" model="ir.ui.view">
+        <field name="name">product.product.form.packaging</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Add the field after cost -->
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="cylindrical_value"/>
+                <field name="spherical_value"/>
+            </xpath>
+        </field>
+    </record>
+    <!--Products Template tree View-->
+    <record id="view_product_product_list_inherit" model="ir.ui.view">
+        <field name="name">product.product.list.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Add the field after sale price -->
+            <xpath expr="//field[@name='lst_price']" position="before">
+                <field name="cylindrical_value" optional="show"/>
+                <field name="spherical_value" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
