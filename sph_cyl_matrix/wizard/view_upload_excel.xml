@@ -8,8 +8,8 @@
                 <group>
                     <group>
                         <field name="file" nolabel="1" class="w-100" filename="name"/>
-<!--                        <field name="filename" readonly="1"/>-->
-<!--                        <field name="file" onchange="onchange_file()"/>-->
+                        <!--                        <field name="filename" readonly="1"/>-->
+                        <!--                        <field name="file" onchange="onchange_file()"/>-->
                     </group>
                     <group>
                         <field name="sheet_name"/>
@@ -35,5 +35,8 @@
               sequence="70"
               parent="sale.sale_menu_root"
               action="action_import_sph_cyl_matrix"/>
+
+
+
 
 </odoo>
