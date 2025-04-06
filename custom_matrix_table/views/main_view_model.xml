@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- form views -->
         <record id="view_sph_cyl_matrix_form" model="ir.ui.view">
             <field name="name">sph.cyl.matrix.form</field>
             <field name="model">sph.cyl.matrix</field>
@@ -10,6 +11,10 @@
                         <group>
                             <group>
                                 <field name="product_id"/>
+                                <field name="company_id" readonly="1" forc_save="1"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                                <field name="approved_by" readonly="1"/>
+                                <field name="date"/>
                             </group>
                             <group>
                                 <field name="cyl"/>
@@ -18,12 +23,14 @@
                             </group>
                         </group>
                     </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
 
+        <!-- list views -->
         <record id="view_sph_cyl_matrix_list" model="ir.ui.view">
-            <field name="name">sph.cyl.matrix.tree</field>
+            <field name="name">sph.cyl.matrix.list</field>
             <field name="model">sph.cyl.matrix</field>
             <field name="arch" type="xml">
                 <list editable="top">
@@ -31,43 +38,20 @@
                     <field name="cyl"/>
                     <field name="sph"/>
                     <field name="value"/>
+                    <field name="approved_by" optional="hide"/>
+                    <field name="date" optional="hide"/>
+                    <field name="sale_order_id" readonly="1" force_save="1" optional="hide"/>
                 </list>
             </field>
         </record>
 
-        <record id="view_sph_cyl_pivot" model="ir.ui.view">
-            <field name="name">sph.cyl.pivot</field>
-            <field name="model">sph.cyl.matrix</field>
-            <field name="arch" type="xml">
-                <pivot string="Matrix">
-                    <!--                <button name="import_sph_cyl_matrix" type="object" string="Import Data" class="btn btn-primary"/>-->
-                    <field name="sph" type="col"/>
-                    <field name="cyl" type="row"/>
-                    <field name="value" type="measure"/>
-                </pivot>
-            </field>
-        </record>
-
+        <!-- action -->
         <record id="action_sph_cyl_matrix" model="ir.actions.act_window">
             <field name="name">Lens Order Matrix</field>
             <field name="res_model">sph.cyl.matrix</field>
-            <field name="view_mode">pivot,list</field>
+            <field name="view_mode">list</field>
             <field name="context">{'search_default_order': 'sph asc'}</field>
         </record>
 
-        <!-- main menu -->
-        <menuitem
-                id="main_lens_matrix"
-                name="Lens Matrix Management"
-                sequence="1"
-                web_icon="sph_cyl_matrix.static/description/icon.png"
-        />
-
-        <menuitem
-                id="menu_sph_cyl_matrix"
-                name="Lens Order Matrix"
-                parent="sph_cyl_matrix.main_lens_matrix"
-                sequence="100"
-                action="action_sph_cyl_matrix"/>
     </data>
 </odoo>

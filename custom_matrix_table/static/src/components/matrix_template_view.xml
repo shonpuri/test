@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="MatrixDashboard" owl="1">
+        <div class="container mt-3">
+            <style>
+                .btn-save:hover {
+                    background: #c5d69c;
+                    color: #0056b3;
+                    border-color: #0056b3;
+                }
+
+                button.btn-primary {
+                    border-radius: 8px;
+                    font-weight: bold;
+                    color: white;
+                    padding: 8px 16px;
+                    background: #6c4c64;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                th, td {
+                    border: 1px solid black;
+                    text-align: center;
+                    vertical-align: middle;
+                    padding: 10px;
+                }
+
+                th {
+                    background-color: #007bff;
+                    color: white;
+                    font-weight: bold;
+                }
+
+                .editable-cell:focus {
+                    outline: 2px solid #007bff;
+                    background-color: #eef7ff;
+                }
+
+                .sticky-header {
+                    position: sticky;
+                    top: 0;
+                    z-index: 2;
+                    background-color: #f8f9fa;
+                }
+
+                .table-container {
+                    width: 100%;
+                    max-height: 500px;
+                    overflow: auto;
+                    position: relative;
+                }
+
+                th {
+                    background-color: #007bff;
+                    color: white;
+                    font-weight: bold;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                }
+
+                td:first-child, th:first-child {
+                    position: sticky;
+                    left: 0;
+                    background-color: #a7abb0;
+                    font-weight: bold;
+                    z-index: 20;
+                }
+
+                .table-container::-webkit-scrollbar {
+                    height: 10px;
+                    width: 10px;
+                }
+
+                .table-container::-webkit-scrollbar-thumb {
+                    background: #007bff;
+                    border-radius: 5px;
+                }
+
+                .matrix-card-header {
+                    background-color: #2596be;
+                    color: white;
+                    padding: 15px 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #dee2e6;
+                }
+
+                .matrix-title {
+                    margin: 0;
+                    font-size: 1.25rem;
+                }
+
+                .editable-cell {
+                    background-color: white;
+                    transition: background-color 0.3s ease;
+                }
+
+                .editable-cell.modified {
+                    background-color: #ffeb3b !important;
+                    border: 2px solid #ff9800;
+                }
+            </style>
+            <div>
+               <div class="shadow-sm border m-2 p-4 bg-white" style="border-radius: 8px; width: 100%;">
+                <h3 class="text-center align-middle text-primary fw-bold">Optical Lens Power Matrix Table</h3>
+
+                <!-- Flex container: Customer info left, Buttons right -->
+                <div class="d-flex justify-content-between align-items-center mt-2 px-3">
+                    <!-- Left: Customer Info -->
+                    <div class="fw-semibold text-dark">
+                        <div>Date: <t t-esc="state.date"/></div>
+                        <div>Customer: <t t-esc="state.customer_id"/></div>
+                        <div>Customer Ref: <t t-esc="state.customer_ref"/></div>
+                    </div>
+
+                    <!-- Right: Buttons -->
+                    <div>
+                        <!-- Show Import button only if customer_id is NOT set -->
+                        <t t-if="!state.customer_id">
+                            <button class="btn btn-primary btn-save me-2" t-on-click="uploadData">Import Data</button>
+                        </t>
+                        <button class="btn btn-primary btn-save me-2" t-on-click="approved">Approved Data</button>
+
+                        <button class="btn btn-primary btn-save" t-on-click="saveChanges">Save Data</button>
+                        <button class="btn btn-primary btn-save" t-on-click="cancelReset">Reset Data</button>
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="shadow-sm border m-2 p-4 bg-white" style="border-radius: 8px;width: 100%;">
+                    <div class="table-container">
+                        <table class="table table-bordered table-striped table-hover text-center align-middle">
+                            <thead class="sticky-header">
+                                <tr>
+                                    <th class="text-center align-middle" style="min-width: 80px;">SPH / CYL</th>
+                                    <t t-foreach="state.sph_values" t-as="sph" t-key="sph">
+                                        <th class="text-center align-middle" style="min-width: 80px;">
+                                            <t t-esc="sph"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="state.cyl_values" t-as="cyl" t-key="cyl">
+                                    <tr>
+                                        <td class="fw-bold text-center align-middle">
+                                            <t t-esc="cyl"/>
+                                        </td>
+                                        <t t-foreach="state.sph_values" t-as="sph" t-key="sph">
+                                            <td contenteditable="true"
+                                                class="editable-cell text-center bg-white btn-save"
+                                                style="min-width: 80px; cursor: pointer;"
+                                                t-att-data-sph="sph"
+                                                t-att-data-cyl="cyl">
+                                                <t t-esc="getCellValue(sph, cyl)"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </t>
+</templates>
