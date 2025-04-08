@@ -44,7 +44,7 @@
                     position: sticky;
                     top: 0;
                     z-index: 2;
-                    background-color: #f8f9fa;
+                    background-color: ##609cbf;
                 }
 
                 .table-container {
@@ -55,7 +55,7 @@
                 }
 
                 th {
-                    background-color: #007bff;
+                    background-color:      #609cbf;
                     color: white;
                     font-weight: bold;
                     position: sticky;
@@ -110,36 +110,56 @@
                <div class="shadow-sm border m-2 p-4 bg-white" style="border-radius: 8px; width: 100%;">
                 <h3 class="text-center align-middle text-primary fw-bold">Optical Lens Power Matrix Table</h3>
 
-                <!-- Flex container: Customer info left, Buttons right -->
-                <div class="d-flex justify-content-between align-items-center mt-2 px-3">
+                   <!-- Flex container: Customer info left, Buttons right -->
+                   <div class="d-flex justify-content-between align-items-start mt-2 px-3">
                     <!-- Left: Customer Info -->
-                    <div class="fw-semibold text-dark">
-                        <div>Date: <t t-esc="state.date"/></div>
-                        <div>Customer: <t t-esc="state.customer_id"/></div>
-                        <div>Customer Ref: <t t-esc="state.customer_ref"/></div>
+                       <div class="card shadow-sm p-3 mb-3 rounded border me-3 flex-fill"
+                            style="background: linear-gradient(135deg, #f0f4ff, #e6f0ff); max-width: 65%;">
+                        <div class="card-body" style="border-radius: 8px;">
+                            <h5 class="card-title text-primary mb-3" style="font-weight: 600;">Customer Details</h5>
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold text-muted">Date : </span>
+                                <span class="text-dark"><t t-esc="state.date"/></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold text-muted">Customer Name : </span>
+                                <span class="text-dark" style="font-weight: bold; font-size: 16px;">
+                                    <t t-esc="state.partner_name"/>
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-muted">Customer Ref : </span>
+                                <span class="text-dark"><t t-esc="state.customer_ref"/></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-muted">Upload Batch No : </span>
+                                <span class="text-dark"><t t-esc="state.upload_batch"/></span>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Right: Buttons -->
-                    <div>
-                        <!-- Show Import button only if customer_id is NOT set -->
-                        <t t-if="!state.customer_id">
-                            <button class="btn btn-primary btn-save me-2" t-on-click="uploadData">Import Data</button>
-                        </t>
-                        <button class="btn btn-primary btn-save me-2" t-on-click="approved">Approved Data</button>
+                       <!-- Right: Buttons -->
+                       <div class="d-flex flex-column justify-content-start gap-2">
+                            <t t-if="!state.customer_id">
+                                <button class="btn btn-primary btn-save" t-on-click="uploadData">Import Data</button>
+                            </t>
+                           <button class="btn btn-success btn-save" t-on-click="approved">Approved &amp; Sale Order</button>
+<!--                           <button class="btn btn-primary btn-save" t-on-click="prepare_sale_order">Prepare Sale Order</button>-->
+<!--                           <button class="btn btn-primary btn-save" t-on-click="cancelReset">Reset Data</button>-->
+                        </div>
+                   </div>
 
-                        <button class="btn btn-primary btn-save" t-on-click="saveChanges">Save Data</button>
-                        <button class="btn btn-primary btn-save" t-on-click="cancelReset">Reset Data</button>
-                    </div>
-                </div>
             </div>
-
-
                 <div class="shadow-sm border m-2 p-4 bg-white" style="border-radius: 8px;width: 100%;">
                     <div class="table-container">
                         <table class="table table-bordered table-striped table-hover text-center align-middle">
                             <thead class="sticky-header">
                                 <tr>
-                                    <th class="text-center align-middle" style="min-width: 80px;">SPH / CYL</th>
+                                    <th class="text-left align-left" style="min-width: 80px;">SPH / CYL</th>
                                     <t t-foreach="state.sph_values" t-as="sph" t-key="sph">
                                         <th class="text-center align-middle" style="min-width: 80px;">
                                             <t t-esc="sph"/>
@@ -158,7 +178,8 @@
                                                 class="editable-cell text-center bg-white btn-save"
                                                 style="min-width: 80px; cursor: pointer;"
                                                 t-att-data-sph="sph"
-                                                t-att-data-cyl="cyl">
+                                                t-att-data-cyl="cyl"
+                                                t-on-blur="onCellInput">
                                                 <t t-esc="getCellValue(sph, cyl)"/>
                                             </td>
                                         </t>

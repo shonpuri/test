@@ -10,13 +10,12 @@
     'depends': ['web', 'base', 'stock', 'sale', 'product_extended'],
     'data': [
         'security/ir.model.access.csv',
-        'views/view_menu.xml',
         'views/matrix_views.xml',
         'views/main_view_model.xml',
         'wizard/view_upload_excel.xml',
 
     ],
-    'images': ['sph_cyl_matrix/static/icon.png'],
+    'images': ['custom_matrix_table/description/icon.png'],
     'installable': True,
     'application': True,
     'license': 'LGPL-3',

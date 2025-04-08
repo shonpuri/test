@@ -10,16 +10,19 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="product_id"/>
+                                <field name="date"/>
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="partner_id" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="customer_ref"/>
                                 <field name="company_id" readonly="1" forc_save="1"
                                        options="{'no_open': True, 'no_create': True}"/>
-                                <field name="approved_by" readonly="1"/>
-                                <field name="date"/>
                             </group>
                             <group>
                                 <field name="cyl"/>
                                 <field name="sph"/>
                                 <field name="value"/>
+                                <field name="approved_by" readonly="1"/>
+                                <field name="approved_date"/>
                             </group>
                         </group>
                     </sheet>
@@ -34,13 +37,18 @@
             <field name="model">sph.cyl.matrix</field>
             <field name="arch" type="xml">
                 <list editable="top">
-                    <field name="product_id"/>
+                    <field name="upload_batch" optional="show"/>
+                    <field name="date"/>
+                    <field name="partner_id" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="product_id" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="customer_ref"/>
                     <field name="cyl"/>
                     <field name="sph"/>
                     <field name="value"/>
+                    <field name="is_approved" optional="hide"/>
                     <field name="approved_by" optional="hide"/>
-                    <field name="date" optional="hide"/>
-                    <field name="sale_order_id" readonly="1" force_save="1" optional="hide"/>
+                    <field name="approved_date" optional="hide"/>
+                    <field name="sale_order_id" force_save="1" optional="hide"/>
                 </list>
             </field>
         </record>
@@ -52,6 +60,21 @@
             <field name="view_mode">list</field>
             <field name="context">{'search_default_order': 'sph asc'}</field>
         </record>
+
+        <!-- Main Menu  -->
+        <menuitem
+                id="main_lens_matrix"
+                name="Lens Matrix Management "
+                sequence="1"
+                web_icon="custom_matrix_table/static/description/icon.png"/>
+
+        <!-- list view -->
+        <menuitem
+                id="menu_sph_cyl_matrix"
+                name="Matrix List"
+                parent="custom_matrix_table.main_lens_matrix"
+                sequence="20"
+                action="custom_matrix_table.action_sph_cyl_matrix"/>
 
     </data>
 </odoo>

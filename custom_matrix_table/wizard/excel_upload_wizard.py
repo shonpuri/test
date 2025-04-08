@@ -1,20 +1,27 @@
 import base64
 import xlrd
+import uuid
 from odoo import models, fields, api
 
 class ImportSPHCYLMatrixWizard(models.TransientModel):
     _name = "import.sph.cyl.matrix.wizard"
     _description = "Import Lens Order Matrix from Excel"
 
+    upload_batch = fields.Char('Batch Code', readonly=True, copy=False, )
+
     file = fields.Binary(string="Upload Excel File", required=True, widget='sph_cyl_upload')
 
-    customer_id = fields.Many2one("res.partner", string="Customer")
+    date = fields.Date(string="Date")
+    partner_id = fields.Many2one("res.partner", string="Customer")
     customer_ref = fields.Char(string="Customer PO/Ref")
 
-    date=fields.Date(string="Date")
     filename = fields.Char(string="Filename", readonly=True)
     sheet_name = fields.Selection([], string="Select Sheet")
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
+
+
+    def get_random_uuid(self):
+        return uuid.uuid4().hex[:10].upper()
 
     @api.onchange("file")
     def _onchange_file(self):
@@ -43,6 +50,7 @@ class ImportSPHCYLMatrixWizard(models.TransientModel):
         file_content = base64.b64decode(self.file)
         wb = xlrd.open_workbook(file_contents=file_content)
         sheet = wb.sheet_by_index(0)
+        upload_batch = self.get_random_uuid()
 
         # **Extract SPH values (First row, skipping first column)**
         sph_values = []
@@ -77,17 +85,22 @@ class ImportSPHCYLMatrixWizard(models.TransientModel):
 
                 # Find matching product
                 product = self.env["product.template"].search([
-                    ("spherical_value", "=", sph_values[col - 1]),
-                    ("cylindrical_value", "=", cyl_value),
+                    ("cylindrical_value", "=", sph_values[col - 1]),
+                    ("spherical_value", "=", cyl_value),
                     ("manufacturing_ok", "=", True)
                 ], limit=1)
 
                 print(f"Found product: {product.name if product else 'None'}")
 
+
                 self.env["sph.cyl.matrix"].create({
+                    "date": self.date,
+                    "partner_id": self.partner_id.id,
+                    "customer_ref": self.customer_ref,
                     "sph": sph_values[col - 1],
                     "cyl": cyl_value,
                     "value": value,
+                    "upload_batch": upload_batch,
                     "product_id": product.id if product else False
                 })
 
@@ -96,12 +109,6 @@ class ImportSPHCYLMatrixWizard(models.TransientModel):
 
         return {
             'type': 'ir.actions.client',
-            'tag': 'menu_matrix_view',
-            'params': {
-                'customer_id': self.customer_id.id,
-                'customer_name': self.customer_id.name,
-                'customer_ref': self.customer_ref,
-                'date': str(self.date),
-            }
+            'tag': 'reload',
         }
 

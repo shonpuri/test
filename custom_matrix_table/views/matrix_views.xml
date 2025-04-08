@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <data>
-        <!-- Action for pos order model    -->
-        <record id="action_matrix_dashboard" model="ir.actions.client">
-            <field name="name">Lens Order Matrix</field>
-            <field name="tag">menu_matrix_view</field>
-        </record>
-    </data>
+    <!-- Action for pos order model    -->
+    <record id="action_matrix_dashboard" model="ir.actions.client">
+        <field name="name">Lens Order Matrix</field>
+        <field name="tag">menu_matrix_view</field>
+    </record>
+    <!-- For creating Menu for Matrix Table    -->
+    <menuitem
+            id="menu_matrix_view"
+            name="Matrix View"
+            parent="custom_matrix_table.main_lens_matrix"
+            sequence="10"
+            action="action_matrix_dashboard"/>
+
 </odoo>
